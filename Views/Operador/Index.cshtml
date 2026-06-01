@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "Panel del Operador";
+}
+
+<div class="container mt-5">
+    <h1 class="display-5 text-primary mb-4"><i class="bi bi-gear-wide-connected"></i> Panel del Operador</h1>
+    
+    <div class="row g-4">
+        <!-- Tarjeta 1: Validar -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-check-circle text-warning mb-3" style="font-size: 2.5rem;"></i>
+                    <h4 class="card-title">Validar Solicitudes</h4>
+                    <p class="text-muted small">Aprueba o rechaza nuevas solicitudes entrantes.</p>
+                    <a asp-controller="Solicitud" asp-action="PendientesValidacion" class="btn btn-outline-warning w-100 mt-2">Ir a Validación</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 2: Asignar -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-person-lines-fill text-info mb-3" style="font-size: 2.5rem;"></i>
+                    <h4 class="card-title">Asignar Conductores</h4>
+                    <p class="text-muted small">Asigna un chofer a las solicitudes validadas.</p>
+                    <a asp-controller="Solicitud" asp-action="Validadas" class="btn btn-outline-info w-100 mt-2">Ir a Asignación</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 3: Todas las Solicitudes -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-list-columns text-primary mb-3" style="font-size: 2.5rem;"></i>
+                    <h4 class="card-title">Todas las Solicitudes</h4>
+                    <p class="text-muted small">Visualiza el historial completo del sistema.</p>
+                    <a asp-controller="Solicitud" asp-action="Index" class="btn btn-outline-primary w-100 mt-2">Ver Todas</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 4: Conductores -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-car-front-fill text-success mb-3" style="font-size: 2.5rem;"></i>
+                    <h4 class="card-title">Directorio Conductores</h4>
+                    <p class="text-muted small">Ver lista de conductores disponibles.</p>
+                    <a asp-controller="Asignacion" asp-action="ConductoresDisponibles" class="btn btn-outline-success w-100 mt-2">Ver Conductores</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
