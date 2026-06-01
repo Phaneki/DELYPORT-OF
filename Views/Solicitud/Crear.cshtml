@@ -1,0 +1,323 @@
+@model SolicitudTransporte
+
+@{
+    ViewData["Title"] = "Crear Solicitud de Transporte";
+    ViewData["Active"] = "Solicitud";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="bi bi-car-front"></i> Registrar Solicitud de Transporte
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Resumen de Errores de Validación -->
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-exclamation-triangle me-2 flex-shrink-0 mt-1" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-2">
+                                        <strong>Errores de Validación</strong>
+                                    </h5>
+                                    <p class="mb-2">Por favor, verifique los siguientes errores antes de continuar:</p>
+                                    
+                                    <!-- ValidationSummary para mostrar todos los errores -->
+                                    @Html.ValidationSummary(false, "", new { @class = "validation-summary-errors list-unstyled mb-0" })
+                                    
+                                    <!-- Si no hay resumen de errores, mostrar errores de propiedades individuales -->
+                                    @if (ViewData.ModelState.Values.SelectMany(v => v.Errors).Any())
+                                    {
+                                        <ul class="mb-0">
+                                            @foreach (var modelState in ViewData.ModelState.Values)
+                                            {
+                                                @foreach (var error in modelState.Errors)
+                                                {
+                                                    <li>@error.ErrorMessage</li>
+                                                }
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Crear" asp-controller="Solicitud" method="post" novalidate class="needs-validation">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Fila 1: Origen y Destino -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Origen" class="form-label fw-bold">
+                                        Origen <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Origen" 
+                                           class="form-control form-control-lg @(ViewData.ModelState["Origen"]?.Errors.Count > 0 ? "is-invalid" : "")" 
+                                           placeholder="Ej: Calle Principal 123, Apartamento 5" 
+                                           required 
+                                           maxlength="100" />
+                                    <small class="form-text text-muted d-block">Entre 3 y 100 caracteres</small>
+                                    <!-- ValidationMessageFor para mostrar error específico del campo -->
+                                    <span asp-validation-for="Origen" class="invalid-feedback d-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Destino" class="form-label fw-bold">
+                                        Dirección Exacta (Destino) <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Destino" 
+                                           class="form-control form-control-lg @(ViewData.ModelState["Destino"]?.Errors.Count > 0 ? "is-invalid" : "")" 
+                                           placeholder="Ej: Avenida Central 456, Piso 2" 
+                                           required 
+                                           maxlength="100" />
+                                    <small class="form-text text-muted d-block">Entre 3 y 100 caracteres</small>
+                                    <span asp-validation-for="Destino" class="invalid-feedback d-block"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nueva Fila: Distrito y Dimensiones para Cotizador -->
+                        <div class="row mb-3 bg-light p-3 rounded border">
+                            <h5 class="text-primary mb-3"><i class="bi bi-calculator"></i> Cotizador de Precio</h5>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="DistritoDestino" class="form-label fw-bold">
+                                        Distrito de Destino <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="DistritoDestino" class="form-select form-select-lg" required id="selectDistrito">
+                                        <option value="">-- Seleccione un distrito --</option>
+                                        <option value="Lima Centro" data-precio="40">Lima Centro (Lima, Breña, Lince)</option>
+                                        <option value="Lima Moderna" data-precio="50">Lima Moderna (Miraflores, San Isidro, Surco)</option>
+                                        <option value="Lima Periferica" data-precio="70">Lima Norte/Sur/Este (Comas, VES, SJL)</option>
+                                    </select>
+                                    <span asp-validation-for="DistritoDestino" class="invalid-feedback d-block"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="DimensionesProducto" class="form-label fw-bold">
+                                        Tamaño del Producto <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="DimensionesProducto" class="form-select form-select-lg" required id="selectDimensiones">
+                                        <option value="">-- Seleccione tamaño --</option>
+                                        <option value="Pequeño" data-recargo="0">Pequeño (Hasta 10kg o caja estándar)</option>
+                                        <option value="Mediano" data-recargo="20">Mediano (Hasta 50kg o electrodoméstico)</option>
+                                        <option value="Grande" data-recargo="50">Grande (Muebles, más de 50kg)</option>
+                                    </select>
+                                    <span asp-validation-for="DimensionesProducto" class="invalid-feedback d-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                <div class="text-center p-3 w-100 rounded shadow-sm bg-white border border-primary">
+                                    <h6 class="text-muted mb-1">Precio Estimado</h6>
+                                    <h2 class="text-primary fw-bold mb-0" id="precioDisplay">S/ 0.00</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fila 2: Fecha y Hora de Servicio -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FechaServicio" class="form-label fw-bold">
+                                        Fecha de Servicio <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="FechaServicio" 
+                                           type="date" 
+                                           class="form-control form-control-lg @(ViewData.ModelState["FechaServicio"]?.Errors.Count > 0 ? "is-invalid" : "")" 
+                                           required 
+                                           min="@DateTime.Today.ToString("yyyy-MM-dd")" 
+                                           id="fechaServicio" />
+                                    <small class="form-text text-muted d-block">Debe ser igual o posterior a hoy (@DateTime.Today.ToString("dd/MM/yyyy"))</small>
+                                    <span asp-validation-for="FechaServicio" class="invalid-feedback d-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="HoraServicio" class="form-label fw-bold">
+                                        Hora de Servicio <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="HoraServicio" 
+                                           type="time" 
+                                           class="form-control form-control-lg @(ViewData.ModelState["HoraServicio"]?.Errors.Count > 0 ? "is-invalid" : "")" 
+                                           required 
+                                           id="horaServicio" />
+                                    <small class="form-text text-muted d-block" id="horaInfo">Hora en formato HH:mm</small>
+                                    <span asp-validation-for="HoraServicio" class="invalid-feedback d-block"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fila 3: Observaciones -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Observaciones" class="form-label fw-bold">
+                                        Observaciones <span class="text-muted">(Opcional)</span>
+                                    </label>
+                                    <textarea asp-for="Observaciones" 
+                                              class="form-control @(ViewData.ModelState["Observaciones"]?.Errors.Count > 0 ? "is-invalid" : "")" 
+                                              rows="4" 
+                                              placeholder="Ingrese detalles adicionales de la solicitud (requisito de pasajeros especiales, paradas adicionales, etc.)"
+                                              maxlength="500"></textarea>
+                                    <small class="form-text text-muted d-block">
+                                        <span id="charCount">0</span> / 500 caracteres
+                                        <span class="text-warning ms-2" id="minCharWarning" style="display:none;">Mínimo 5 caracteres si completa este campo</span>
+                                    </small>
+                                    <span asp-validation-for="Observaciones" class="invalid-feedback d-block"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mb-2">
+                                    <i class="bi bi-check-circle"></i> Registrar Solicitud
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <a asp-action="Index" class="btn btn-outline-secondary btn-lg w-100">
+                                    <i class="bi bi-arrow-left"></i> Volver al Listado
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Validación del lado cliente
+        document.querySelector('form').addEventListener('submit', function (e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            this.classList.add('was-validated');
+        });
+
+        // Contador de caracteres para Observaciones
+        const observacionesField = document.querySelector('[name="Observaciones"]');
+        const charCountSpan = document.getElementById('charCount');
+        const minCharWarning = document.getElementById('minCharWarning');
+
+        if (observacionesField) {
+            observacionesField.addEventListener('input', function () {
+                charCountSpan.textContent = this.value.length;
+                
+                // Mostrar advertencia si tiene texto pero menos de 5 caracteres
+                if (this.value.length > 0 && this.value.length < 5) {
+                    minCharWarning.style.display = 'inline';
+                } else {
+                    minCharWarning.style.display = 'none';
+                }
+            });
+        }
+
+        // Validación de hora en tiempo real
+        const fechaInput = document.getElementById('fechaServicio');
+        const horaInput = document.getElementById('horaServicio');
+        const horaInfo = document.getElementById('horaInfo');
+
+        if (fechaInput && horaInput) {
+            function validarHora() {
+                const fechaSeleccionada = fechaInput.value;
+                const horaSeleccionada = horaInput.value;
+                
+                if (!fechaSeleccionada || !horaSeleccionada) return;
+
+                const hoy = new Date().toISOString().split('T')[0];
+                const horaActual = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+                if (fechaSeleccionada === hoy) {
+                    const [horasActual, minutosActual] = horaActual.split(':').map(Number);
+                    const [horasSeleccionada, minutosSeleccionada] = horaSeleccionada.split(':').map(Number);
+
+                    if (horasSeleccionada < horasActual || 
+                        (horasSeleccionada === horasActual && minutosSeleccionada <= minutosActual)) {
+                        horaInput.classList.add('is-invalid');
+                        horaInfo.innerHTML = `<span class="text-danger"><i class="bi bi-exclamation-circle"></i> La hora debe ser posterior a ${horaActual}</span>`;
+                    } else {
+                        horaInput.classList.remove('is-invalid');
+                        horaInfo.innerHTML = 'Hora en formato HH:mm';
+                    }
+                } else {
+                    horaInput.classList.remove('is-invalid');
+                    horaInfo.innerHTML = 'Hora en formato HH:mm';
+                }
+            }
+
+            fechaInput.addEventListener('change', validarHora);
+            horaInput.addEventListener('change', validarHora);
+        }
+
+        // Prevenir caracteres especiales inválidos
+        const origenField = document.querySelector('[name="Origen"]');
+        const destinoField = document.querySelector('[name="Destino"]');
+
+        [origenField, destinoField].forEach(field => {
+            if (field) {
+                field.addEventListener('input', function () {
+                    // Permitir solo caracteres alfanuméricos, espacios y signos de puntuación básicos
+                    this.value = this.value.replace(/[^a-zA-Z0-9\s\-,áéíóúñÁÉÍÓÚÑ.]/g, '');
+                });
+            }
+        });
+
+        // Cotizador Dinámico
+        const selectDistrito = document.getElementById('selectDistrito');
+        const selectDimensiones = document.getElementById('selectDimensiones');
+        const precioDisplay = document.getElementById('precioDisplay');
+
+        function calcularPrecio() {
+            let precioBase = 0;
+            let recargo = 0;
+
+            if (selectDistrito.selectedIndex > 0) {
+                const optDistrito = selectDistrito.options[selectDistrito.selectedIndex];
+                precioBase = parseFloat(optDistrito.getAttribute('data-precio')) || 0;
+            }
+
+            if (selectDimensiones.selectedIndex > 0) {
+                const optDimensiones = selectDimensiones.options[selectDimensiones.selectedIndex];
+                recargo = parseFloat(optDimensiones.getAttribute('data-recargo')) || 0;
+            }
+
+            const total = precioBase + recargo;
+            precioDisplay.innerText = `S/ ${total.toFixed(2)}`;
+            
+            // Animación breve
+            precioDisplay.classList.remove('text-primary');
+            precioDisplay.classList.add('text-success', 'fs-1');
+            setTimeout(() => {
+                precioDisplay.classList.remove('text-success', 'fs-1');
+                precioDisplay.classList.add('text-primary');
+            }, 300);
+        }
+
+        selectDistrito.addEventListener('change', calcularPrecio);
+        selectDimensiones.addEventListener('change', calcularPrecio);
+    </script>
+}
