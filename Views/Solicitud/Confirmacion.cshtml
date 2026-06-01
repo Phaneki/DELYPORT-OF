@@ -1,0 +1,157 @@
+@model SolicitudTransporte
+
+@{
+    ViewData["Title"] = "Confirmación de Solicitud";
+    ViewData["Active"] = "Solicitud";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Alerta de Éxito -->
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                <div class="text-center">
+                    <i class="bi bi-check-circle display-1 text-success mb-3"></i>
+                    <h4 class="alert-heading">¡Solicitud Registrada Exitosamente!</h4>
+                    <p class="mb-0">Su solicitud de transporte ha sido registrada en nuestro sistema.</p>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Confirmación -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-receipt"></i> Detalles de la Solicitud
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Número de Solicitud e Identificador Único -->
+                    <div class="row mb-4 pb-3 border-bottom">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h6 class="text-muted mb-1">Número de Solicitud (ID)</h6>
+                            <h3 class="text-primary">
+                                <i class="bi bi-hash"></i> @Model.Id
+                            </h3>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-1">Identificador Único</h6>
+                            <h4 class="text-success">
+                                <i class="bi bi-upc-scan"></i> @Model.IdentificadorUnico
+                            </h4>
+                        </div>
+                    </div>
+
+                    <!-- Información de Origen y Destino -->
+                    <div class="row mb-4 pb-3 border-bottom">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="text-muted mb-2"><i class="bi bi-geo-fill text-primary"></i> Origen</h6>
+                                <p class="h5 mb-0">@Model.Origen</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger"></i> Destino Exacto (@Model.DistritoDestino)</h6>
+                                <p class="h5 mb-0">@Model.Destino</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información del Cotizador -->
+                    <div class="row mb-4 pb-3 border-bottom">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h6 class="text-muted mb-2"><i class="bi bi-box-seam text-info"></i> Dimensiones del Producto</h6>
+                            <p class="h5 mb-0">@Model.DimensionesProducto</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-success bg-opacity-10 rounded border border-success">
+                                <h6 class="text-success mb-2"><i class="bi bi-cash text-success"></i> Precio Estimado a Pagar</h6>
+                                <p class="h3 mb-0 text-success fw-bold">S/ @Model.PrecioEstimado.ToString("0.00")</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información de Fecha y Hora -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h6 class="text-muted mb-2"><i class="bi bi-calendar-event text-info"></i> Fecha de Servicio</h6>
+                            <p class="h5 mb-0">@Model.FechaServicio.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2"><i class="bi bi-clock-fill text-warning"></i> Hora de Servicio</h6>
+                            <p class="h5 mb-0">@Model.HoraServicio.ToString("HH:mm")</p>
+                        </div>
+                    </div>
+
+                    <!-- Información de Observaciones -->
+                    @if (!string.IsNullOrWhiteSpace(Model.Observaciones))
+                    {
+                        <div class="row mb-4 pb-3 border-bottom">
+                            <div class="col-12">
+                                <h6 class="text-muted mb-2"><i class="bi bi-chat-left-text text-success"></i> Observaciones</h6>
+                                <p class="mb-0 p-3 bg-light rounded">@Model.Observaciones</p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Estado y Fecha de Solicitud -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h6 class="text-muted mb-2"><i class="bi bi-info-circle text-secondary"></i> Estado</h6>
+                            <p class="mb-0">
+                                <span class="badge bg-warning text-dark fs-6">@Model.Estado</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2"><i class="bi bi-calendar-check text-secondary"></i> Fecha de Solicitud</h6>
+                            <p class="mb-0">@Model.FechaSolicitud.ToString("dd/MM/yyyy HH:mm:ss")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximos Pasos -->
+            <div class="alert alert-info mt-4" role="alert">
+                <h5 class="alert-heading"><i class="bi bi-lightbulb"></i> Próximos Pasos</h5>
+                <ul class="mb-0">
+                    <li>Su solicitud ha sido registrada con el número <strong>#@Model.Id</strong></li>
+                    <li>El estado actual es <strong>@Model.Estado</strong></li>
+                    <li>Nos comunicaremos con usted para confirmar los detalles</li>
+                    <li>Guarde el número de solicitud para futuras referencias</li>
+                </ul>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="row mt-4 g-2">
+                <div class="col-md-6">
+                    <a asp-action="Detalles" asp-route-id="@Model.Id" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-eye"></i> Ver Detalles
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a asp-action="Crear" class="btn btn-success btn-lg w-100">
+                        <i class="bi bi-plus-circle"></i> Nueva Solicitud
+                    </a>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg w-100">
+                        <i class="bi bi-list-ul"></i> Ver Listado
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Opcional: Imprimir la confirmación
+        window.addEventListener('load', function () {
+            console.log('Solicitud registrada exitosamente con ID:', @Model.Id);
+        });
+    </script>
+}
