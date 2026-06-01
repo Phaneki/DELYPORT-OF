@@ -1,0 +1,56 @@
+@model IEnumerable<Trabajo_Software.Models.SolicitudTransporte>
+
+@{
+    ViewData["Title"] = "Mis Viajes";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Viajes Asignados a: <span class="text-primary">@ViewBag.ConductorNombre</span></h2>
+        <a asp-action="Index" class="btn btn-outline-danger">Cerrar Sesión</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-success">¡No tienes viajes pendientes! Estás libre por ahora.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var viaje in Model)
+            {
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-primary">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between">
+                            <strong><i class="bi bi-geo-alt"></i> Solicitud #@viaje.Id</strong>
+                            <span class="badge bg-light text-dark">@viaje.Estado</span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Origen:</strong> @viaje.Origen</p>
+                            <p><strong>Destino Exacto:</strong> @viaje.Destino (@viaje.DistritoDestino)</p>
+                            <p><strong>Fecha y Hora:</strong> @viaje.FechaServicio.ToString("dd/MM/yyyy") a las @viaje.HoraServicio.ToString("HH:mm")</p>
+                            <p><strong>Carga:</strong> @viaje.DimensionesProducto</p>
+                            <p><strong>Cobro al Cliente:</strong> <span class="text-success fw-bold">S/ @viaje.PrecioEstimado.ToString("0.00")</span></p>
+                            @if (!string.IsNullOrEmpty(viaje.Observaciones))
+                            {
+                                <p><strong>Observaciones Cliente:</strong> @viaje.Observaciones</p>
+                            }
+                            @if (!string.IsNullOrEmpty(viaje.ObservacionesValidacion))
+                            {
+                                <p><strong>Observaciones Operador:</strong> @viaje.ObservacionesValidacion</p>
+                            }
+                        </div>
+                        <div class="card-footer bg-white text-end">
+                            <form asp-action="FinalizarViaje" method="post" class="d-inline">
+                                <input type="hidden" name="solicitudId" value="@viaje.Id" />
+                                <button type="submit" class="btn btn-success" onclick="return confirm('¿Confirmas que has completado este viaje?');">
+                                    <i class="bi bi-check2-all"></i> Marcar como Completado
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

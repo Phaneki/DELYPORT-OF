@@ -1,0 +1,36 @@
+@model IEnumerable<Trabajo_Software.Models.Conductor>
+
+@{
+    ViewData["Title"] = "Conductores Disponibles";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Directorio de Conductores Disponibles</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">Actualmente no hay conductores disponibles en el sistema.</div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var conductor in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="bi bi-person-badge"></i> @conductor.NombreCompleto</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>ID:</strong> @conductor.Id<br />
+                                <strong>Licencia:</strong> @conductor.Licencia<br />
+                                <strong>Estado:</strong> <span class="badge bg-primary">@conductor.Estado</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
