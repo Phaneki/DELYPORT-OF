@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center mt-5">
+    <h1 class="display-3 mb-4">Sistema de Transporte</h1>
+    <p class="lead">Bienvenido a la plataforma. Por favor, selecciona tu perfil para ingresar:</p>
+
+    <div class="row justify-content-center mt-5 g-4">
+        <div class="col-md-3">
+            <a asp-controller="Cliente" asp-action="Index" class="text-decoration-none">
+                <div class="card h-100 shadow border-primary text-primary transition-hover">
+                    <div class="card-body py-5">
+                        <i class="bi bi-person-fill mb-3" style="font-size: 4rem;"></i>
+                        <h3>Cliente</h3>
+                        <p class="small text-muted mt-2">Solicitar viajes</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-md-3">
+            <a asp-controller="Operador" asp-action="Index" class="text-decoration-none">
+                <div class="card h-100 shadow border-warning text-warning transition-hover">
+                    <div class="card-body py-5">
+                        <i class="bi bi-gear-fill mb-3" style="font-size: 4rem;"></i>
+                        <h3>Operador</h3>
+                        <p class="small text-muted mt-2">Validar y Asignar</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-controller="ConductorUI" asp-action="Index" class="text-decoration-none">
+                <div class="card h-100 shadow border-success text-success transition-hover">
+                    <div class="card-body py-5">
+                        <i class="bi bi-car-front-fill mb-3" style="font-size: 4rem;"></i>
+                        <h3>Conductor</h3>
+                        <p class="small text-muted mt-2">Ver viajes asignados</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
