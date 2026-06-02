@@ -5,11 +5,11 @@
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4">Directorio de Conductores Disponibles</h2>
+    <h2 class="mb-4">Directorio de Conductores</h2>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-warning">Actualmente no hay conductores disponibles en el sistema.</div>
+        <div class="alert alert-warning">Actualmente no hay conductores registrados en el sistema.</div>
     }
     else
     {
@@ -18,14 +18,22 @@
             {
                 <div class="col">
                     <div class="card h-100 shadow-sm">
-                        <div class="card-header bg-success text-white">
+                        <div class="card-header @(conductor.Estado == "Disponible" ? "bg-success" : "bg-secondary") text-white">
                             <h5 class="mb-0"><i class="bi bi-person-badge"></i> @conductor.NombreCompleto</h5>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
                                 <strong>ID:</strong> @conductor.Id<br />
                                 <strong>Licencia:</strong> @conductor.Licencia<br />
-                                <strong>Estado:</strong> <span class="badge bg-primary">@conductor.Estado</span>
+                                <strong>Estado:</strong> 
+                                @if(conductor.Estado == "Disponible")
+                                {
+                                    <span class="badge bg-success">@conductor.Estado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">@conductor.Estado</span>
+                                }
                             </p>
                         </div>
                     </div>

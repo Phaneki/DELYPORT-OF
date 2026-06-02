@@ -17,7 +17,6 @@ public class AsignacionController : Controller
     public async Task<IActionResult> ConductoresDisponibles()
     {
         var conductores = await _context.Conductores
-            .Where(c => c.Estado == "Disponible")
             .ToListAsync();
 
         return View(conductores);

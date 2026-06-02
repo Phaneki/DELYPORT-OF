@@ -78,7 +78,7 @@
                             <div class="col-md-6 mb-3">
                                 <h6 class="text-muted mb-2">Fecha de Servicio</h6>
                                 <p class="h5 mb-0">
-                                    <strong>@Model.FechaServicio.ToString("dddd, dd de MMMM de yyyy", new System.Globalization.CultureInfo("es-ES"))</strong>
+                                    <strong>@Model.FechaServicio.ToString("dddd, dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"))</strong>
                                 </p>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -91,15 +91,28 @@
                     </div>
 
                     <!-- Sección de Observaciones -->
-                    @if (!string.IsNullOrWhiteSpace(Model.Observaciones))
+                    @if (!string.IsNullOrWhiteSpace(Model.Observaciones) || !string.IsNullOrWhiteSpace(Model.ObservacionesValidacion))
                     {
                         <div class="mb-5">
                             <h5 class="mb-3 pb-2 border-bottom">
                                 <i class="bi bi-chat-left-text text-success"></i> Observaciones
                             </h5>
-                            <div class="p-3 bg-light rounded">
-                                <p class="mb-0">@Model.Observaciones</p>
-                            </div>
+                            
+                            @if (!string.IsNullOrWhiteSpace(Model.Observaciones))
+                            {
+                                <div class="p-3 bg-light rounded mb-3">
+                                    <h6 class="text-muted"><i class="bi bi-person"></i> Del Cliente:</h6>
+                                    <p class="mb-0">@Model.Observaciones</p>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.ObservacionesValidacion))
+                            {
+                                <div class="p-3 bg-warning bg-opacity-10 rounded border border-warning">
+                                    <h6 class="text-warning-emphasis"><i class="bi bi-shield-check"></i> Del Operador (Validación):</h6>
+                                    <p class="mb-0">@Model.ObservacionesValidacion</p>
+                                </div>
+                            }
                         </div>
                     }
 
@@ -120,13 +133,17 @@
                                     {
                                         <span class="badge bg-warning text-dark">@Model.Estado</span>
                                     }
-                                    else if (Model.Estado == "Confirmada")
+                                    else if (Model.Estado == "Validada")
                                     {
                                         <span class="badge bg-success">@Model.Estado</span>
                                     }
-                                    else if (Model.Estado == "Cancelada")
+                                    else if (Model.Estado == "Rechazada")
                                     {
                                         <span class="badge bg-danger">@Model.Estado</span>
+                                    }
+                                    else if (Model.Estado == "Asignado")
+                                    {
+                                        <span class="badge bg-info text-dark">@Model.Estado</span>
                                     }
                                     else
                                     {
@@ -168,19 +185,26 @@
                         </div>
                         <p class="text-muted small">Se le notificará cuando el estado cambie</p>
                     }
-                    else if (Model.Estado == "Confirmada")
+                    else if (Model.Estado == "Validada")
                     {
                         <div class="alert alert-success mb-3" role="alert">
-                            <p class="mb-0">La solicitud ha sido <strong>confirmada</strong></p>
+                            <p class="mb-0">La solicitud ha sido <strong>validada</strong></p>
                         </div>
-                        <p class="text-muted small">El servicio está programado para la fecha y hora indicada</p>
+                        <p class="text-muted small">Está lista para que un conductor sea asignado.</p>
                     }
-                    else if (Model.Estado == "Cancelada")
+                    else if (Model.Estado == "Rechazada")
                     {
                         <div class="alert alert-danger mb-3" role="alert">
-                            <p class="mb-0">La solicitud ha sido <strong>cancelada</strong></p>
+                            <p class="mb-0">La solicitud ha sido <strong>rechazada</strong></p>
                         </div>
-                        <p class="text-muted small">Puede crear una nueva solicitud cuando lo desee</p>
+                        <p class="text-muted small">Revise las observaciones del operador.</p>
+                    }
+                    else if (Model.Estado == "Asignado")
+                    {
+                        <div class="alert alert-info mb-3" role="alert">
+                            <p class="mb-0">Un conductor ha sido <strong>asignado</strong></p>
+                        </div>
+                        <p class="text-muted small">El servicio se encuentra en curso.</p>
                     }
                 </div>
             </div>
