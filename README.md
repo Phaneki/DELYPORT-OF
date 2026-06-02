@@ -79,12 +79,31 @@ Alternativamente, puede usar la compilación normal:
 dotnet run
 ```
 
-### Paso 5: Navegación
-Una vez que el servidor esté corriendo, el navegador se abrirá automáticamente en `https://localhost:<puerto>`.
-- Portal de Solicitudes: `/Solicitud`
-- Portal de Validación (Operador): `/Solicitud/PendientesValidacion`
-- Directorio de Choferes: `/Asignacion/ConductoresDisponibles`
-- Portal del Conductor: `/ConductorUI`
+### Paso 5: Instrucciones de Uso por Historia de Usuario (HU)
+
+Una vez que el servidor esté corriendo, el navegador se abrirá automáticamente en `https://localhost:<puerto>`. Siga estos flujos según la Historia de Usuario:
+
+#### 🧑‍💻 HU-001: Registro de Solicitud (Flujo del Cliente)
+1. Navegue a la ruta principal: **`/Solicitud`**
+2. Haga clic en el botón azul **"Nueva Solicitud"**.
+3. Llene el formulario con datos válidos (origen, destino, dimensiones y fecha futura).
+4. Haga clic en **"Registrar Solicitud"**.
+5. Verá la pantalla de confirmación con su ticket generado y el estado inicial en "Pendiente".
+
+#### 🛡️ HU-003: Validación Logística (Flujo del Operador)
+1. Ingrese a la bandeja del operador en: **`/Solicitud/PendientesValidacion`**
+2. Visualice las solicitudes enviadas por los clientes que están en estado "Pendiente".
+3. Haga clic en **"Evaluar"** en cualquiera de ellas.
+4. Escriba una observación (ej. "Todo conforme, ruta viable") y presione **"Aprobar"** o **"Rechazar"**.
+5. Si aprueba, la solicitud pasará a estar "Validada" (lista para asignación).
+
+#### 🚚 HU-004: Asignación de Conductor (Flujo de Despacho)
+1. Revise el estado de su flota en el Directorio de Conductores: **`/Asignacion/ConductoresDisponibles`**
+2. Vaya a las solicitudes validadas listas para despacho: **`/Solicitud/Validadas`**
+3. Haga clic en **"Asignar Conductor"** a una solicitud.
+4. En el menú desplegable, elija a un conductor que esté "Disponible" y confirme.
+5. El conductor pasará automáticamente a estado "Ocupado". 
+6. (Opcional) Navegue al portal del chofer en **`/ConductorUI`**, ingrese la licencia del conductor asignado y visualice los detalles de la ruta que le ha sido designada.
 
 ---
 
