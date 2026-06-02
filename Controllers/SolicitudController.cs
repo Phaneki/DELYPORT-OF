@@ -30,7 +30,7 @@ public class SolicitudController : Controller
         try
         {
             var solicitudes = await _context.SolicitudesTransporte
-                .OrderByDescending(s => s.FechaSolicitud)
+                .OrderByDescending(s => s.Id)
                 .ToListAsync();
 
             return View(solicitudes);
@@ -52,7 +52,7 @@ public class SolicitudController : Controller
         {
             var solicitudesRegistradas = await _context.SolicitudesTransporte
                 .Where(s => s.Estado == "Pendiente")
-                .OrderByDescending(s => s.FechaSolicitud)
+                .OrderByDescending(s => s.Id)
                 .ToListAsync();
 
             return View(solicitudesRegistradas);
@@ -74,7 +74,7 @@ public class SolicitudController : Controller
         {
             var solicitudesValidadas = await _context.SolicitudesTransporte
                 .Where(s => s.Estado == "Validada")
-                .OrderBy(s => s.FechaServicio).ThenBy(s => s.HoraServicio)
+                .OrderByDescending(s => s.Id)
                 .ToListAsync();
 
             return View(solicitudesValidadas);
